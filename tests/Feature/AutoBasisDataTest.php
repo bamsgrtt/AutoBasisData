@@ -90,6 +90,25 @@ class AutoBasisDataTest extends TestCase
             ->assertJson(['error' => 'No database selected. Please configure a database first.']);
     }
 
+    public function test_can_delete_draft_practical(): void
+    {
+        $practical = Practical::factory()->create(['status' => 'draft']);
+
+        $response = $this->delete(route('practicals.destroy', $practical));
+
+        $response->assertRedirect(route('practicals.index'));
+        $this->assertDatabaseMissing('practicals', ['id' => $practical->id]);
+    }
+
+    public function test_cannot_delete_non_draft_practical(): void
+    {
+        $practical = Practical::factory()->create(['status' => 'completed']);
+
+        $this->delete(route('practicals.destroy', $practical));
+
+        $this->assertDatabaseHas('practicals', ['id' => $practical->id]);
+    }
+
     public function test_model_relationships(): void
     {
         $user = User::factory()->create();

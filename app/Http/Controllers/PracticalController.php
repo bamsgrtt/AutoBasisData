@@ -19,6 +19,7 @@ class PracticalController extends Controller
         $practicals = Practical::withCount('tasks')->latest()->take(5)->get();
         $stats = [
             'total' => Practical::count(),
+            'draft' => Practical::where('status', 'draft')->count(),
             'in_progress' => Practical::where('status', 'in_progress')->count(),
             'completed' => Practical::where('status', 'completed')->count(),
         ];
@@ -80,6 +81,10 @@ class PracticalController extends Controller
     {
         $practical->load(['tasks.executions' => fn ($q) => $q->latest()]);
 
+        if ($practical->selected_database && ! session('selected_database')) {
+            session(['selected_database' => $practical->selected_database]);
+        }
+
         return view('practicals.workspace', compact('practical'));
     }
 
@@ -101,5 +106,17 @@ class PracticalController extends Controller
         ]);
 
         return response()->json(['status' => 'saved', 'execution' => $execution]);
+    }
+
+    public function destroy(Practical $practical): RedirectResponse
+    {
+        if ($practical->status !== 'draft') {
+            return redirect()->back()->with('error', 'Hanya praktikum dengan status draft yang dapat dihapus.');
+        }
+
+        $practical->delete();
+
+        return redirect()->route('practicals.index')
+            ->with('success', 'Draft praktikum berhasil dihapus.');
     }
 }

@@ -12,6 +12,7 @@ Route::get('/', [PracticalController::class, 'dashboard'])->name('home');
 Route::get('/praktikum', [PracticalController::class, 'index'])->name('practicals.index');
 Route::post('/praktikum', [PracticalController::class, 'store'])->name('practicals.store');
 Route::get('/praktikum/{practical}', [PracticalController::class, 'show'])->name('practicals.show');
+Route::delete('/praktikum/{practical}', [PracticalController::class, 'destroy'])->name('practicals.destroy');
 
 // API endpoints (JSON, dipanggil dari workspace via AJAX)
 Route::post('/api/database/test', [DatabaseConfigController::class, 'testConnection'])->name('database.config.test');

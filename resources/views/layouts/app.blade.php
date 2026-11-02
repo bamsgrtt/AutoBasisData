@@ -26,36 +26,42 @@
         .terminal-box .muted { color: #484f58; }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen">
-    {{-- Navbar: 3 menu saja --}}
+<body class="bg-gray-100 font-sans antialiased text-gray-800 min-h-screen flex flex-col">
+    {{-- Navbar --}}
     <nav class="bg-white shadow-sm border-b sticky top-0 z-50">
         <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
             <div class="flex items-center gap-8">
-                <a href="{{ route('home') }}" class="font-bold text-lg text-blue-600">AutoBasisData</a>
+                <a href="{{ route('home') }}" class="font-bold text-lg text-blue-600 hover:text-blue-700 transition-colors">AutoBasisData</a>
                 <div class="flex items-center gap-5 text-sm font-medium">
                     <a href="{{ route('home') }}"
-                       class="{{ request()->routeIs('home') ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600' }}">
+                       class="{{ request()->routeIs('home') ? 'text-blue-600 font-semibold' : 'text-gray-600 hover:text-blue-600' }} transition-colors">
                         Dashboard
                     </a>
                     <a href="{{ route('practicals.index') }}"
-                       class="{{ request()->routeIs('practicals.*') ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600' }}">
+                       class="{{ request()->routeIs('practicals.*') ? 'text-blue-600 font-semibold' : 'text-gray-600 hover:text-blue-600' }} transition-colors">
                         Praktikum
                     </a>
                     <a href="{{ route('settings') }}"
-                       class="{{ request()->routeIs('settings') ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600' }}">
+                       class="{{ request()->routeIs('settings') ? 'text-blue-600 font-semibold' : 'text-gray-600 hover:text-blue-600' }} transition-colors">
                         Pengaturan
                     </a>
                 </div>
             </div>
             @if (session('selected_database'))
-                <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded font-mono">
+                <span class="text-xs bg-green-100 text-green-700 px-2.5 py-1 rounded-full font-mono font-medium flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-green-500 inline-block"></span>
                     DB: {{ session('selected_database') }}
                 </span>
+            @else
+                <a href="{{ route('settings') }}"
+                   class="text-xs bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-2.5 py-1 rounded-full font-medium transition-colors flex items-center gap-1">
+                    <span>⚠</span> Pilih Database
+                </a>
             @endif
         </div>
     </nav>
 
-    <main class="max-w-6xl mx-auto px-4 py-6">
+    <main class="max-w-6xl mx-auto px-4 py-6 flex-1 w-full">
         @if (session('success'))
             <div class="bg-green-50 border border-green-300 text-green-800 px-4 py-3 rounded mb-4 text-sm">
                 {{ session('success') }}
